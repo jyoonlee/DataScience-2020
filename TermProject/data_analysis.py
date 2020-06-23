@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn import preprocessing
 from sklearn.preprocessing import LabelEncoder
 
 # read dataset
@@ -27,23 +26,18 @@ label = LabelEncoder()
 
 # lebeling categorical value
 df['Name'] = label.fit_transform(df['Name'].values)
-#df['Location'] = label.fit_transform(df['Location'].values)
-#df['Owner_Type'] = label.fit_transform(df['Owner_Type'].values)
-#df['Fuel_Type'] = label.fit_transform(df['Fuel_Type'].values)
-#df['Transmission'] = label.fit_transform(df['Transmission'].values)
 
 loc = sns.countplot(df['Location'])
 loc.set_xticklabels(loc.get_xticklabels(), rotation=40, ha="right")
 plt.show()
 
 own = sns.countplot(df['Owner_Type'])
-own.set_xticklabels(own.get_xticklabels(), rotation=40, ha="right")
 plt.show()
 
 fuel = sns.countplot(df['Fuel_Type'])
-fuel.set_xticklabels(fuel.get_xticklabels(), rotation=40, ha="right")
 plt.show()
 
 trans = sns.countplot(df['Transmission'])
-trans.set_xticklabels(trans.get_xticklabels(), rotation=40, ha="right")
 plt.show()
+
+print('The number of car name is :', len(np.unique(df['Name'])))
