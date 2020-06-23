@@ -6,7 +6,7 @@ from sklearn import preprocessing
 from sklearn.preprocessing import LabelEncoder
 
 # read dataset
-data = pd.read_csv('C:/Users/82105/Documents/GitHub/DataScience/TermProject/car_data.csv', encoding='utf-8')
+data = pd.read_csv('car_data.csv', encoding='utf-8')
 
 # copy
 df = data.copy()
@@ -35,20 +35,20 @@ df['Fuel_Type'] = label.fit_transform(df['Fuel_Type'].values)
 df['Transmission'] = label.fit_transform(df['Transmission'].values)
 
 print(df.info())
-df.to_csv("preprocessing_data.csv")
+
 
 # heat map with non-categorical value
 heatmap_data = df[['Year', 'Kilometers_Driven', 'Mileage (kmpl)', 'Engine (CC)', 'Power (bhp)', 'Seats', 'Price']]
 colormap = plt.cm.PuBu
 plt.figure(figsize=(15, 15))
 plt.title("Correlation of Features", y=1.05, size=15)
-sns.heatmap(heatmap_data.astype(float).corr(), linewidths=0.1, vmax=1.0, square=False, cmap=colormap, linecolor="white",
+sns.heatmap(heatmap_data.astype(float).corr(), linewidths=0.1, square=False, cmap=colormap, linecolor="white",
             annot=True, annot_kws={"size": 16})
 
-#plt.show()
 print(heatmap_data)
 
-df.drop(['Kilometers_Driven', 'Mileage (kmpl)', 'Seats'], 1)
+df.drop(['Location', 'Fuel_Type', 'Kilometers_Driven', 'Mileage (kmpl)', 'Seats',], 1, inplace=True)
+df.to_csv("preprocessing_data.csv")
 print(df)
 
 # Min-Max Scaling

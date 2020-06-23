@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
 
 # read dataset
-data = pd.read_csv('C:/Users/82105/Documents/GitHub/DataScience/TermProject/car_data.csv', encoding='utf-8')
+data = pd.read_csv('car_data.csv', encoding='utf-8')
 
 # copy
 df = data.copy()
