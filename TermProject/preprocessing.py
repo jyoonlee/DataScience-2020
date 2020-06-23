@@ -2,69 +2,71 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-
-# read dataset
+from sklearn import preprocessing
 from sklearn.preprocessing import LabelEncoder
 
-df = pd.read_csv('C:/Users/82105/Desktop/train-data.csv', encoding='utf-8')
+# read dataset
+data = pd.read_csv('C:/Users/82105/Documents/GitHub/DataScience/TermProject/car_data.csv', encoding='utf-8')
 
+# copy
+df = data.copy()
 print(df.isnull().sum())
-del df['New_Price']
-columns = list(df.columns)
 
+# drop unnecessary data
+df = df.drop(['New_Price'], 1)
+df = df.drop(['Unnamed: 0'], 1)
+columns = list(df.columns)
 print(columns)
+
+# preprocessing process
+# change value 0 to NaN
+df.replace(0, np.nan, inplace=True)
+df.replace('null ', np.nan, inplace=True)
+
+# fill value using bfill
+df.fillna(method='bfill', inplace=True)
 label = LabelEncoder()
 
-#preprocessing
-df = df.applymap(str)
+# lebeling categorical value
 df['Name'] = label.fit_transform(df['Name'].values)
-print(np.unique(df['Location'])) # dirty value detection
 df['Location'] = label.fit_transform(df['Location'].values)
-print(np.unique(df['Location']))
-df['Year'] = pd.to_numeric(df['Year'], errors="coerce")
-df['Year'].fillna(method='bfill', inplace=True)
-print(np.unique(df['Year']))
-df['Kilometers_Driven'] = pd.to_numeric(df['Kilometers_Driven'], errors="coerce")
-df['Kilometers_Driven'].fillna(method='bfill', inplace=True)
-df['Kilometers_Driven']=df['Kilometers_Driven'].where(df['Kilometers_Driven'].between(0,1000000))
-print(np.unique(df['Fuel_Type']))
-df['Fuel_Type'].replace({'?': np.NaN, 'nan': np.NaN}, inplace=True)
-df['Fuel_Type'].fillna(method='bfill', inplace=True)
-df['Fuel_Type'] = label.fit_transform(df['Fuel_Type'].values)
-print(np.unique(df['Fuel_Type']))
-print(np.unique(df['Transmission']))
-df['Transmission'].replace({'?': np.NaN, 'nan': np.NaN}, inplace=True)
-df['Transmission'].fillna(method='bfill', inplace=True)
-df['Transmission'] = label.fit_transform(df['Transmission'].values)
-print(np.unique(df['Transmission']))
-print(np.unique(df['Owner_Type']))
-df['Owner_Type'].replace({'?': np.NaN, 'nan': np.NaN}, inplace=True)
-df['Owner_Type'].fillna(method='bfill', inplace=True)
 df['Owner_Type'] = label.fit_transform(df['Owner_Type'].values)
-print(np.unique(df['Owner_Type']))
-df['Mileage (kmpl)'] = pd.to_numeric(df['Mileage (kmpl)'], errors="coerce")
-df['Mileage (kmpl)'].replace({0: np.NaN}, inplace=True)
-df['Mileage (kmpl)'].fillna(method='bfill', inplace=True)
-df['Engine (CC)'] = pd.to_numeric(df['Engine (CC)'], errors="coerce")
-df['Engine (CC)'].fillna(method='bfill', inplace=True)
-df['Engine (CC)'].replace({0: np.NaN}, inplace=True)
-df['Power (bhp)'] = pd.to_numeric(df['Power (bhp)'], errors="coerce")
-df['Power (bhp)'].fillna(method='bfill', inplace=True)
-df['Seats'] = pd.to_numeric(df['Seats'], errors="coerce")
-df['Seats'].replace({0: np.NaN}, inplace=True)
-df['Seats'].fillna(method='bfill', inplace=True)
-df['Price'] = pd.to_numeric(df['Price'], errors="coerce")
-df['Price'].fillna(method='bfill', inplace=True)
+df['Fuel_Type'] = label.fit_transform(df['Fuel_Type'].values)
+df['Transmission'] = label.fit_transform(df['Transmission'].values)
 
-for each in columns:
-    print(df[each].value_counts())
+print(df.info())
+df.to_csv("preprocessing_data.csv")
 
-#heat map
+# heat map with non-categorical value
 heatmap_data = df[['Year', 'Kilometers_Driven', 'Mileage (kmpl)', 'Engine (CC)', 'Power (bhp)', 'Seats', 'Price']]
 colormap = plt.cm.PuBu
 plt.figure(figsize=(15, 15))
 plt.title("Correlation of Features", y=1.05, size=15)
 sns.heatmap(heatmap_data.astype(float).corr(), linewidths=0.1, vmax=1.0, square=False, cmap=colormap, linecolor="white",
             annot=True, annot_kws={"size": 16})
+
 #plt.show()
-#print(heatmap_data)
+print(heatmap_data)
+
+df.drop(['Kilometers_Driven', 'Mileage (kmpl)', 'Seats'], 1)
+print(df)
+
+# Min-Max Scaling
+X = df[['Year', 'Engine (CC)', 'Power (bhp)']]
+y = df['Price']
+scaler = preprocessing.MinMaxScaler()
+scaled_df = scaler.fit_transform(X)
+scaled_df = pd.DataFrame(scaled_df,columns=['Year', 'Engine (CC)', 'Power (bhp)'])
+fig, (ax1, ax2) = plt.subplots(ncols=2, figsize=(6, 5))
+
+ax1.set_title('Before Scaling')
+sns.kdeplot(df['Year'], ax=ax1)
+sns.kdeplot(df['Engine (CC)'], ax=ax1)
+sns.kdeplot(df['Power (bhp)'], ax=ax1)
+
+ax2.set_title('After Robust Scaling')
+sns.kdeplot(scaled_df['Year'], ax=ax2)
+sns.kdeplot(scaled_df['Engine (CC)'], ax=ax2)
+sns.kdeplot(scaled_df['Power (bhp)'], ax=ax2)
+plt.show()
+
