@@ -1,5 +1,5 @@
 import pandas as pd
-from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+from sklearn.neighbors import KNeighborsRegressor
 from sklearn.model_selection import KFold, GridSearchCV
 
 df = pd.read_csv('preprocessing_data.csv', encoding='utf-8')

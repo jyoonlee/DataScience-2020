@@ -34,6 +34,7 @@ df['Owner_Type'] = label.fit_transform(df['Owner_Type'].values)
 df['Fuel_Type'] = label.fit_transform(df['Fuel_Type'].values)
 df['Transmission'] = label.fit_transform(df['Transmission'].values)
 
+#df['Price_ca'] = pd.qcut(df.Price, q=7, labels=[0, 1, 2, 3, 4, 5, 6])
 print(df.info())
 
 
@@ -47,6 +48,7 @@ sns.heatmap(heatmap_data.astype(float).corr(), linewidths=0.1, square=False, cma
 
 print(heatmap_data)
 
+#df.drop(['Location', 'Fuel_Type', 'Kilometers_Driven', 'Mileage (kmpl)', 'Price', 'Seats',], 1, inplace=True)
 df.drop(['Location', 'Fuel_Type', 'Kilometers_Driven', 'Mileage (kmpl)', 'Seats',], 1, inplace=True)
 df.to_csv("preprocessing_data.csv")
 print(df)
