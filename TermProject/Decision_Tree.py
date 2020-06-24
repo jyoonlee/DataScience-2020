@@ -2,9 +2,10 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, classification_report
-from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor, export_graphviz
 from sklearn.model_selection import KFold, GridSearchCV
 from sklearn.model_selection import train_test_split
+import pydot
 
 df = pd.read_csv('preprocessing_data.csv', encoding='utf-8')
 
@@ -24,6 +25,7 @@ tree2 = DecisionTreeRegressor(max_depth=5, random_state=0)
 model = GridSearchCV(tree2, parameters, cv=kfold)
 model.fit(X, y)
 
+print('Predict value : ')
 print('best value: ', model.best_params_)
 print('best score: %.2f' % model.best_score_)
 
@@ -49,6 +51,7 @@ plt.ylabel('Real value')
 plt.xlabel('Prediction value')
 
 print(classification_report(y_test, prediction, digits=3, zero_division=1))
+print('DecisionTree score : %.2f' % tree.score(X_test, y_test))
 plt.show()
 
 print('==========================================================\n')
@@ -61,5 +64,6 @@ kfold = KFold(5, shuffle=True)
 model = GridSearchCV(tree, parameters, cv=kfold)
 model.fit(X, y)
 
+print('Categorical value : ')
 print('best value: ', model.best_params_)
 print('best score: %.2f' % model.best_score_)
