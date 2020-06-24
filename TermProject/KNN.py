@@ -8,6 +8,7 @@ df = pd.read_csv('preprocessing_data.csv', encoding='utf-8')
 X = df.drop(['Price'], 1)
 y = df['Price']
 
+# k-fold
 kfold = KFold(5, shuffle=True)
 parameters = {'n_neighbors': range(3, 10)}
 clf = GridSearchCV(KNeighborsRegressor(),
