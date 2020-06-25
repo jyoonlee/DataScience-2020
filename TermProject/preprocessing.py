@@ -34,7 +34,8 @@ df['Owner_Type'] = label.fit_transform(df['Owner_Type'].values)
 df['Fuel_Type'] = label.fit_transform(df['Fuel_Type'].values)
 df['Transmission'] = label.fit_transform(df['Transmission'].values)
 
-#df['Price_ca'] = pd.qcut(df.Price, q=7, labels=[0, 1, 2, 3, 4, 5, 6])
+# outlier
+df['Kilometers_Driven'] = df['Kilometers_Driven'].where(df['Kilometers_Driven'].between(0, 1000000))
 print(df.info())
 
 

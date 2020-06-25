@@ -5,7 +5,10 @@ from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor, export_graphviz
 from sklearn.model_selection import KFold, GridSearchCV
 from sklearn.model_selection import train_test_split
+
 import pydot
+import os
+os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.38/bin'
 
 df = pd.read_csv('preprocessing_data.csv', encoding='utf-8')
 
@@ -35,13 +38,20 @@ df.drop(['Price'], 1, inplace=True)
 X = df.drop(['Price_ca'], 1)
 y = df['Price_ca']
 
+column = X.columns
+
 print('==========================================================\n')
 
 # test data
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
-tree = DecisionTreeClassifier(max_depth=5, criterion='entropy', random_state=0)
+tree = DecisionTreeClassifier(max_depth=5, criterion='gini', random_state=0)
 tree.fit(X_train, y_train)
 prediction = tree.predict(X_test)
+
+# file
+export_graphviz(tree, out_file="tree_result.dot", feature_names=column)
+(graph,) = pydot.graph_from_dot_file("tree_result.dot", encoding='utf8')
+graph.write_png('tree.png')
 
 # confusion matrix
 confusion = confusion_matrix(y_test, prediction)
