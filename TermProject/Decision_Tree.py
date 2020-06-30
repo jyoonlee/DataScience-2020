@@ -1,7 +1,7 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.ensemble import BaggingClassifier, RandomForestRegressor
+from sklearn.ensemble import BaggingClassifier, RandomForestRegressor, RandomForestClassifier
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor, export_graphviz
 from sklearn.model_selection import KFold, GridSearchCV
@@ -71,6 +71,7 @@ plt.ylabel('Real value')
 plt.xlabel('Prediction value')
 
 print(classification_report(y_test, prediction, digits=3, zero_division=1))
+or_score = tree.score(X_test, y_test)
 print('DecisionTree score : %.2f' % tree.score(X_test, y_test))
 plt.show()
 
@@ -90,41 +91,59 @@ print('best score: %.2f' % model.best_score_)
 
 print('==========================================================\n')
 
-# ensemble learning
+print('Original Score(before bagging) : %.2f' % or_score)
+
+# BaggingClassifier
 model = BaggingClassifier(DecisionTreeClassifier(max_depth=3), n_estimators=10, max_samples=400, bootstrap=True)
 model.fit(X_train, y_train)
 model.predict(X_test)
 print('k = {} accuracy : %.2f'.format(10) % model.score(X_test, y_test))
 
-# ensemble learning
 model = BaggingClassifier(DecisionTreeClassifier(max_depth=3), n_estimators=50, max_samples=400, bootstrap=True)
 model.fit(X_train, y_train)
 model.predict(X_test)
 print('k = {} accuracy : %.2f'.format(50) % model.score(X_test, y_test))
 
-# ensemble learning
 model = BaggingClassifier(DecisionTreeClassifier(max_depth=3), n_estimators=100, max_samples=400, bootstrap=True)
 model.fit(X_train, y_train)
 model.predict(X_test)
 print('k = {} accuracy : %.2f'.format(100) % model.score(X_test, y_test))
 
-# ensemble learning
 model = BaggingClassifier(DecisionTreeClassifier(max_depth=3), n_estimators=200, max_samples=400, bootstrap=True)
 model.fit(X_train, y_train)
 model.predict(X_test)
 print('k = {} accuracy : %.2f'.format(200) % model.score(X_test, y_test))
 
-# ensemble learning
 model = BaggingClassifier(DecisionTreeClassifier(max_depth=3), n_estimators=300, max_samples=400, bootstrap=True)
 model.fit(X_train, y_train)
 model.predict(X_test)
 print('k = {} accuracy : %.2f'.format(300) % model.score(X_test, y_test))
 
-print('\n\n')
-print('k = 10 accuracy : 0.84')
-print('k = 50 accuracy : 0.86')
-print('k = 100 accuracy : 0.87')
-print('k = 200 accuracy : 0.86')
-print('k = 300 accuracy : 0.87')
+print('\n==========================================================\n')
 
+print('Original Score(before ensemble learning) : %.2f' % or_score)
+# RandomForestClassifier
+forest = RandomForestClassifier(n_estimators=10, n_jobs=-1, random_state=42)
+forest.fit(X_train, y_train)
+forest.predict(X_test)
+print('n_estimators = {} accuracy : %.2f'.format(10) % forest.score(X_test, y_test))
 
+forest = RandomForestClassifier(n_estimators=50, n_jobs=-1, random_state=42)
+forest.fit(X_train, y_train)
+forest.predict(X_test)
+print('n_estimators = {} accuracy : %.2f'.format(50) % forest.score(X_test, y_test))
+
+forest = RandomForestClassifier(n_estimators=100, n_jobs=-1, random_state=42)
+forest.fit(X_train, y_train)
+forest.predict(X_test)
+print('n_estimators = {} accuracy : %.2f'.format(100) % forest.score(X_test, y_test))
+
+forest = RandomForestClassifier(n_estimators=300, n_jobs=-1, random_state=42)
+forest.fit(X_train, y_train)
+forest.predict(X_test)
+print('n_estimators = {} accuracy : %.2f'.format(300) % forest.score(X_test, y_test))
+
+forest = RandomForestClassifier(n_estimators=500, n_jobs=-1, random_state=42)
+forest.fit(X_train, y_train)
+forest.predict(X_test)
+print('n_estimators = {} accuracy : %.2f'.format(500) % forest.score(X_test, y_test))
