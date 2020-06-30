@@ -40,4 +40,14 @@ plt.show()
 trans = sns.countplot(df['Transmission'])
 plt.show()
 
+df['Name'] = label.fit_transform(df['Name'].values)
+df['Location'] = label.fit_transform(df['Location'].values)
+df['Owner_Type'] = label.fit_transform(df['Owner_Type'].values)
+df['Fuel_Type'] = label.fit_transform(df['Fuel_Type'].values)
+df['Transmission'] = label.fit_transform(df['Transmission'].values)
+
+fig = plt.figure(figsize=(5,8))
+plt.boxplot(df)
+plt.show()
+
 print('The number of car name is :', len(np.unique(df['Name'])))
