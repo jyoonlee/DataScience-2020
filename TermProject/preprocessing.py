@@ -28,11 +28,11 @@ df.fillna(method='bfill', inplace=True)
 label = LabelEncoder()
 
 # lebeling categorical value
-df['Name'] = label.fit_transform(df['Name'].values)
-df['Location'] = label.fit_transform(df['Location'].values)
-df['Owner_Type'] = label.fit_transform(df['Owner_Type'].values)
-df['Fuel_Type'] = label.fit_transform(df['Fuel_Type'].values)
-df['Transmission'] = label.fit_transform(df['Transmission'].values)
+df['Name'] = label.fit_transform(df['Name'])
+df['Location'] = label.fit_transform(df['Location'])
+df['Owner_Type'] = label.fit_transform(df['Owner_Type'])
+df['Fuel_Type'] = label.fit_transform(df['Fuel_Type'])
+df['Transmission'] = label.fit_transform(df['Transmission'])
 
 # outlier
 df['Kilometers_Driven'] = df['Kilometers_Driven'].where(df['Kilometers_Driven'].between(0, 1000000))
